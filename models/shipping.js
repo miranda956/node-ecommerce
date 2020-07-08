@@ -1,0 +1,55 @@
+module.exports=(sequelize,Datatypes)=>{
+    const Shipping=sequelize.define("Shipping",{
+        id:{
+            type:Datatypes.INTEGER,
+            autoincrement:true,
+            primaryKey: true
+        },
+        shippingName:{
+            type:Datatypes.STRING,
+            allowNUll:false,
+        },
+        shippingAddress:{
+            type:Datatypes.STRING,
+            allowNUll:false
+        },
+        shippingCity:{
+            type:Datatypes.STRING,
+            allowNUll:false
+        },
+        shippingCounty:{
+            type:Datatypes.STRING,
+            allowNUll:false
+        },
+        shippingZip:{
+            type:Datatypes.INTEGER,
+            allowNUll:false,
+            validate:{
+                len:[5]
+            }
+        },
+        shippingCountry:{
+            type:Datatypes.STRING,
+            allowNUll:false
+        },
+        shippingPhone:{
+            type:Datatypes.INTEGER,
+            allowNUll:false,
+            validate:{
+                len:[0,10]
+            }
+        },
+        orderid:{
+            type:Datatypes.INTEGER
+        }
+    },{
+    classMethods:{
+        associate:(models)=>{
+            Shipping.hasMany(models.Order);
+        }
+    },
+
+    timestamp:false
+    });
+return Shipping;
+}

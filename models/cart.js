@@ -5,8 +5,14 @@ module.exports=(sequelize,Datatypes)=>{
             allowNull:false,
             validate:{
                 len:[0,10]
-            }
+            },
+            required:true
         }
+        
+    }
+    ,{
+        freezeTableName:true,
+        timestamps:false
     });
     Cart.associate=function(models){
         Cart.belongsTo(models.User,{

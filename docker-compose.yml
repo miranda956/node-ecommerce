@@ -1,0 +1,26 @@
+
+version: '3'
+
+services:
+  app:
+    container_name: docker-node-mysql
+    build: .
+    ports:
+      - "8080:4040"
+    links:
+      - mysql-dev
+    depends_on:
+      - mysql-dev
+    restart: always
+    command: npm start
+
+
+  mysql-dev:
+    container_name: mysql-container
+    image: mysql:8.0.2
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: Ecommerce
+    ports:
+      - "3306:3306"
+      

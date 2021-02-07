@@ -1,12 +1,6 @@
 module.exports=function(sequelize,Datatypes){
     const Billing=sequelize.define("Billing",{
-        id:{
-            type:Datatypes.INTEGER,
-            autoincrement:true,
-            primaryKey: true,
-            
-
-        },
+        
         billingName:{
             type:Datatypes.STRING,
             allowNull:false
@@ -38,19 +32,21 @@ module.exports=function(sequelize,Datatypes){
         billingPhone:{
             type:Datatypes.INTEGER,
             allowNull:false,
-            validate:{
-                len:[10,13]
-            }
+            
         }
 
+    },
+    {
+        freezeTableName:true,
+        timestamps:false
     },
     {
         classMethods:{
             associate:function(models){
                 billing.hasMany(models.Order)
             }
-        },
-        timeStamp:false
+        }, 
+        
 
     }
     );

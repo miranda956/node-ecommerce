@@ -4,11 +4,13 @@ module.exports=(sequelize,Datatypes)=>{
     const User=sequelize.define("User",{
         firstName:{
             type:Datatypes.STRING,
-            allowNull:false
+            allowNull:false,
+            required:true
         },
         lastName:{
             type:Datatypes.STRING,
-            allowNull:false
+            allowNull:false,
+            required:true
         },
         email:{
             type:Datatypes.STRING,
@@ -23,12 +25,18 @@ module.exports=(sequelize,Datatypes)=>{
             allowNull:false,
             validate:{
                 len:[8]
-            }
+            },
+            required:true
         },
         isAdmin:{
             type:Datatypes.BOOLEAN,
             defaultValue:false
         }
+
+    },
+    {
+        freezeTableName:true,
+        timestamps:false
 
     },
     {
@@ -52,10 +60,11 @@ module.exports=(sequelize,Datatypes)=>{
         }  */
     },
     ); 
-    User.beforeCreate((user,options,cb)=>{
+     User.beforeCreate((user,options)=>{
         user.pwd=bcrypt.hashSync(user.pwd,
             bcrypt.genSaltSync(10),null);
-            cb(null,options)
-    })
+            
+    }
+    )
     return User;
 }

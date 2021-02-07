@@ -2,28 +2,31 @@ const passport =require("passport");
 const localStrategy=require("passport-local").Strategy;
 const googleStrategy=require("passport-google-oauth").OAuth2Strategy;
 const db =require("../models");
-const facebook=require("passport-facebook").OAuth2Strategy;
-/* facebook authentication strategy will be used here*/
-/*passport.use("facebook-signup",new FacebookStrategy({
-    clientID:'',
-    clientsecret:"",
-    // redirects to your application running environment
-    callbackURL:"http://localhost:4040/auth/facebook/callback",
-    enableProof:true
-},(accessToken,refreshToken,profile,cb)=>{
-    userfindOrCreate({facebookid:profile.id},function(err,user){
-        return cb(err,user)
-    });
-}
-    )); */
-    /* google  authentincation will go here */
-  /*  passport.use('google-signup',new googleStrategy({
-        clientID:"445638585229-s97ba5iibcaelg3ckvkc91b11rqd6fs9.apps.googleusercontent.com",
-        clientSecret:"-ZTwdAIwHvJiVWyXVIMULmkE",
-        callbackURL:"http://localhost:4040/auth/facebook/callback"
-    },(accesToken,refreshToken,profile,cb)=>{
+// google authentication
+const OAuth=require('./auth');
 
-    })) */
+function extractProfile(profile) { 
+    var imageURL = '';
+    if (profile.photos && profile.photos.length) {
+      imageUrl = profile.photos[0].value;
+    }
+    return {
+      id: profile.id,
+      displayName: profile.displayName,
+      image: imageUrl
+    };
+  }
+  
+  passport.use(new googleStrategy({
+      clientID: OAuth.googleAuth.clientID,
+      clientSecret: OAuth.googleAuth.clientSecret,
+      callbackURL: OAuth.googleAuth.callbackURL
+    },
+    function(accessToken, refreshToken, profile, cb) {
+      cb(null, extractProfile(profile));
+    }
+  ));
+    
 // local signup
 passport.use("local-signup",new localStrategy({
     usernameField:'email',

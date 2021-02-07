@@ -7,6 +7,11 @@ module.exports=(sequelize,Datatypes)=>{
         
     },
     {
+        freezeTableName:true,
+        timestamps:false
+
+    },
+    {
         classMethods:{
             associate:(models)=>{
                 Category.hasMany(models.Product)
@@ -17,4 +22,4 @@ module.exports=(sequelize,Datatypes)=>{
     );
     return Category;
 
-}
+} 

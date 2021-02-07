@@ -22,15 +22,17 @@ app.use(session({
 }));
 app.use(cookieparser());
 app.use('public',express.static(path.join(__dirname,'./public')));
+ /*app.set('view engine','exhbs');
+app.enable("view cache");
 app.set('views',path.join('./views'));
 app.engine('.hbs',exhbs({
     defaultLayout:'main',
     extname:'hbs',
-    layoutsDir:'./views/layouts',
-    partialsDir:'./views/paertials',
+    layoutsDir:__dirname+'./views/layouts',
+    partialsDir:__dirname+'./views/partials',
     helpers:{
         // helpers in handlebars 
-        grouped_each: function(every, context, options) {
+        grouped_each: function(every, context, options) { 
 		    var out = "", subcontext = [], i;
 		    if (context && context.length > 0) {
 		        for (i = 0; i < context.length; i++) {
@@ -41,7 +43,7 @@ app.engine('.hbs',exhbs({
 		            subcontext.push(context[i]);
 		        }
 		        out += options.fn(subcontext);
-		    }
+	    }
 		    return out;
 			},
 			json: function(context) {
@@ -49,12 +51,26 @@ app.engine('.hbs',exhbs({
 			}
     }
 
-}))
+})); */
+ /* app.set('views', path.join(__dirname, 'views'));
+app.engine("handlebars", exhbs({ defaultLayout: "main",
+extname:'hbs',
+layoutsDir:__dirname+'./views/layouts',
+partialsDir:__dirname+'./views/partials' 
 
-app.set('view engine','exhbs');
+}));
+app.set("view engine", "handlebars");
+*/
 
-db.sequelize.sync({force:false}).then(function(){
-	app.listen(PORT,function(){
+require('./controllers/authController')(app);
+require('./controllers/indexController')(app);
+require('./controllers/usercontroller')(app);
+require('./controllers/productController')(app);
+require('./controllers/categoriesController')(app);
+require('./controllers/cartController')(app);
+require('./controllers/orderController')(app);
+db.sequelize.sync({force:false}).then(()=>{
+	app.listen(PORT,()=>{
 		console.log(`application running on the port ${PORT}`);
 	});
-})
+}); 

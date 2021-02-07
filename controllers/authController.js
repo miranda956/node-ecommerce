@@ -22,22 +22,26 @@ function router(app){
         res.render('/signup')
     });
 
-    app.post('/signup',(req,res)=>{
+    app.post('/signup',(req,res,next)=>{
+        // passed tests 
         db.User.create({
-            firstname:req.body.firstname,
-            lastname:req.body.lastname,
-            email:req.body.email,
-            password:req.body.password
+            firstName:req.body.firstName,
+            lastName:req.body.lastName,
+            email:req.body.email, 
+            pwd:req.body.pwd
         }).then((user)=>{
-            return req.login(user,(err)=>{
+            res.json(user);
+           return req.login(user,(err)=>{
                 if(err){
-                    return next(err)
-                }
+                    return next(err )
+                } 
                 res.redirect('/login')
             })
             res.redirect('/products')
+            
         }).catch((err)=>{
-            res.redirect('/signup')
+             res.redirect('/signup')
+             next(err)
         })
     })
     

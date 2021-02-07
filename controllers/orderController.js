@@ -3,54 +3,41 @@ var db = require("../models");
 var stripe = require('../config/stripe.js');
 var isAuthenticated = require('../config/middleware/isAuthenticated.js');
 var sequelize = require('sequelize');
+// need to be  debugeed 
 
 // ROUTES
 function router(app) {
 
   // show all orders for current user
-  app.get("/orders", isAuthenticated, function(request, response,next) {
+  app.get("/orders",(request, response,next)=> {
     db.Order
+    // passed tests 
       .findAll({
         // calculate total from purchase prices
         // format date from createdAt
         // count number of items in order
-        attributes: ['orderId', [sequelize.fn('sum', sequelize.col('Order.purchasePrice')), 'orderTotal'],[sequelize.fn('date_format', sequelize.col('Order.createdAt'), '%m-%d-%y'), 'formattedDate'], [sequelize.fn('count', sequelize.col('Order.quantity')), 'itemCount']],
+        attributes: ['orderId', [sequelize.fn('sum', sequelize.col('Order.purchase_Price')), 'orderTotal'], [sequelize.fn('count', sequelize.col('Order.quantity')), 'itemCount']],
         // group results
-        group: ['Order.orderId','formattedDate'],
+        group: ['Order.orderId'],
         where: {
-          UserId: request.user.id
-        }
+          UserId:2
+        },
+        include: [db.Products, db.Shipping, db.Billing]
         // },
         // include: [db.Product, db.Shipping, db.Billing]
       })
       .then(function(allOrders) {
-        response.render('past-orders', {orders:allOrders, user: request.user});
-        // response.json(allOrders);
+      response.status(200).json(allOrders);
+      
       })
-      .catch(function(err) {
-        console.error(err.message);
+      .catch((err)=> {
         next(err);
-        response.send(err);
       });
   });
 
 
-  app.get('/orders/:id', isAuthenticated, function(req, res,next) {
-    db.Order.findAll({
-      where: {
-        UserId: req.user.id,
-        orderId: req.params.id
-      },
-      include: [db.Product, db.Shipping, db.Billing]
-    }).then(function(orderItems) {
-      res.render('past-order', {orderItems: orderItems, user: req.user});
-    }).catch(function(err) {
-      console.error(err.message);
-      res.send(err);
-      next(err);
-    })
-  });
-
+  
+  
   app.get("/order/", isAuthenticated, function(req, res) {
     res.render('order', { user: req.user });
   });
@@ -179,9 +166,9 @@ Functions-------------------------------------
 	    var stripeToken = stripe.tokens.create({
 	      card: {
 	        "number": request.body.ccNum,
-	        "exp_month": 12,
-	        "exp_year": 2018,
-	        "cvc": '123'
+	        "exp_month": req.body.exp_month,
+	        "exp_year": req.body.exp_year,
+	        "cvc": req.body.cvc
 	      }
 	    }, function(err, token) {
 	      if (err) {
@@ -190,7 +177,7 @@ Functions-------------------------------------
 	      } else {
 	        stripe.charges.create({
 	            amount: (total*100).toFixed(0), //in lowest currency unit
-	            currency: "usd",
+	            currency: req.body.currency,
 	            description: "Example charge",
 	            source: token.id,
 	        }, function(err, charge) {
@@ -226,22 +213,35 @@ Functions-------------------------------------
   });
 
   // show order by order id
-  app.get("/order/:id", isAuthenticated, function(request, response) {
+  app.get("/order/:id",(request, response,next)=> {
+    // passed tests 
     db.Order
       .findAll({
         where: {
-          orderId: request.params.id
+          orderId:1
         },
-        include: [db.Product, db.Shipping, db.Billing]
+        include: [db.Products, db.Shipping, db.Billing]
       })
       .then(function(orderItems) {
-        response.json(orderItems);
+        response.json(orderItems);     
       })
       .catch(function(err) {
+        next(err);
         console.log(err.message);
         response.send(err);
       });
   });
+  
+// for -admin
+app.get('/get/allorders',(req,res,next)=>{
+  db.Order.findAll({
+    include:[db.Products, db.Shipping, db.Billing]
+  }).then((result)=>{
+   res.json(result)
+  }).catch((err)=>{
+    next(err)
+  })
+})
 
 }
 

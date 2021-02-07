@@ -1,6 +1,6 @@
-function route(app){
+function router(app){
     app.get('/',(req,res)=>{
-        res.send('/products')
+        res.redirect('/products')
     })
 }
-module.exports=router;
+module.exports=router;  

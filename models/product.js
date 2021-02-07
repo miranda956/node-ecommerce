@@ -28,7 +28,11 @@ const Products=sequelize.define("Products",{
         type:Datatypes.BOOLEAN,
         defaultValue:true
     }
-});
+},{
+    freezeTableName:true,
+    timestamps:false
+}
+);
 Products.associate=function(models){
     Products.belongsTo(models.Category,{
         foreignkey:{

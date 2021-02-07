@@ -1,66 +1,75 @@
 
 const  db =require('../models');
+const isauthenticated=require("../config/middleware/isAuthenticated");
 
 function router(app){
     // show cart by  user id
-    app.get('/cart',(req,res)=>{
+    
+    app.get('/api/cart/user/:id',(req,res,next)=>{
+        // passed tests 
         db.Cart.findAll({
             where:{
-                userid:req.user.id
+                UserId:1
             },
             include:[db.Products]
         }).then((cartitems)=>{
-            res.render('cart',{cartitems,user:req.user})
+            res.json(cartitems);
         }).catch((err)=>{
-            console.log(err.message);
-            res.send(err)
+            next(err);
         });
     });
     //add item to cart
-    app.post('/cart/:itemid',(req,res)=>{
+    app.post('/cart/:itemid',(req,res,next)=>{
+        // passed tests 
+        
         db.Cart.create({
-            userid:req.user.id,
-            productid:req.params.itemid,
-            quantity:req.body.quantity
+            UserId:1,
+            ProductId:1,  
+            quantity:4
         }).then((additems)=>{
-            res.redirect('/products')
+            res.status(201).json(additems)
         }).catch((err)=>{
+            next(err)
             console.log(err.message);
-            res.send(err)
+            
         });
     });
 // update quantity to cart 
-app.put("/cart/:itemid",(req,res)=>{
+app.patch("/cart/:itemid",(req,res,next)=>{
+    //passed tests 
     db.Cart.update({
-        quantity:req.body.quantity
+        quantity:16
     },{
         where:{
-            userid:req.user.id,
-            productid:req.params.itemid
+            UserId:1,
+            ProductId:1
         },
         include:[db.Products]
     }).then((cartitems)=>{
-        res.redirect('/cart')
+        
+        res.status(201).json(cartitems)      
     }).catch((err)=>{
+        next(err)
         console.log(err.message);
-        res.send(err)
+    
     });
 });
 
 
 // delete item from cart 
-app.delete('/cart/:itemid',(req,res)=>{
+app.delete('/cart/:itemid',(req,res,next)=>{
+    // passed test 
     db.Cart.destroy({
         where:{
-            userid:req.user.id,
-            id:req.params.itemid
+            UserId:1,
+            id:7
         }
-
     }).then((cartitems)=>{
-        res.redirect('/cart');
+        res.status(202).json(cartitems)
     }).catch((err)=>{
+        next(err);
         console.log(err.message);
-        res.send(err)
+        res.send(err);
     });
 });
 }

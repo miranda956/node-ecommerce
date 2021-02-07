@@ -1,10 +1,7 @@
 module.exports=(sequelize,Datatypes)=>{
     const Shipping=sequelize.define("Shipping",{
-        id:{
-            type:Datatypes.INTEGER,
-            autoincrement:true,
-            primaryKey: true
-        },
+        
+        
         shippingName:{
             type:Datatypes.STRING,
             allowNUll:false,
@@ -32,17 +29,17 @@ module.exports=(sequelize,Datatypes)=>{
             type:Datatypes.STRING,
             allowNUll:false
         },
-        shippingPhone:{
-            type:Datatypes.INTEGER,
-            allowNUll:false,
-            validate:{
-                len:[0,10]
-            }
-        },
+       
         orderid:{
             type:Datatypes.INTEGER
         }
     },{
+        freezeTableName:true,
+        timestamps:false
+
+    },
+    
+    {
     classMethods:{
         associate:(models)=>{
             Shipping.hasMany(models.Order);

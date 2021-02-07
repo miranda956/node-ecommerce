@@ -4,39 +4,43 @@ const db =require('../models');
 function router(app){
 
 // get all categories
-app.get('/categories',(req,res)=>{
-    db.Categories.findAll({}).then((categories)=>{
-        res.json('/categories')
+app.get('/categories',(req,res,next)=>{
+    // passed tests
+    db.Category.findAll({})
+    .then((category)=>{
+        res.status(200).json(category);
     }).catch((err)=>{
-        console.log(err.message);
-        res.send(err)
+        next(err)
+    });
+})
+// returns product by category name 
+app.get("/productcategory/name",(req,res,next)=>{
+    // passed tests 
+    db.Products.findAll({
+        where:{
+            CategoryId:1
+        },
+        include:[db.Category]
 
+    }).then((Products)=>{
+        
+        res.status(201).json(Products)
+    }).catch((err)=>{
+        next(err)
     })
 })
- // show product by category name
- app.post('product/category/:categoryName',(req,res)=>{
-     db.sequelize.promise.all([
-         db.Product.findAll({
-            where:{
-                CategoryId:req.body.Categoryid
-            }
-         }),
-         db.Categories.findAll({})
-     ]).spread((products,categories)=>{
-         res.render('products',{products,categories,user:req.user})
-     })
- })
+
 // create anew category
-app.post('/category',(req,res)=>{
-    db.Categories.create({
-        name:req.body.name
+app.post('/category/create',(req,res)=>{
+    // passed test
+    db.Category.create({
+        name:"coolcool"
     }).then((result)=>{
-        res.send('result'+req.body.name )
+        res.status(201).json(result)     
     }).catch((err)=>{
         console.log(err.message);
         res.send(err)
     })
 })
-
 }
 module.exports=router

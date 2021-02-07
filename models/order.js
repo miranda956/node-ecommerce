@@ -1,12 +1,7 @@
 module.exports=(sequelize,Datatypes)=>{
     const Order=sequelize.define("Order",{
-        id:{
-            type:Datatypes.INTEGER,
-            autoincrement:true,
-            primaryKey:true,
-
-        },
-        orderid:{
+        
+        orderId:{
             type:Datatypes.INTEGER,
         },
         quantity:{
@@ -18,12 +13,17 @@ module.exports=(sequelize,Datatypes)=>{
         cclast:{
             type:Datatypes.INTEGER
         }
-    });
+    },
+    {
+        freezeTableName:true,
+        timestamps:false
+    }
+    );
     Order.associate=function(models){
         Order.belongsTo(models.User,{
             foreignkey:{
                 allownull:false
-            }
+            } 
         });
         Order.belongsTo(models.Products,{
             foreignkey:{
@@ -39,8 +39,9 @@ module.exports=(sequelize,Datatypes)=>{
             foreignkey:{
                 allownull:false
             }
-        })
-
-    }
+        }) 
+ 
+    }    
 return Order;
 }
+

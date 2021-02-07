@@ -1,0 +1,136 @@
+/* Nav */
+nav.navbar.navbar-default {
+    background: #337ab7;
+}
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:focus, .navbar-default .navbar-nav>li>a   {
+    color:#fff;
+}
+
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-nav > li > a:hover{
+    color: #e8e8e8;
+}
+
+
+/* Products */
+
+.container .intro {
+  display: none;
+  position: absolute;
+  background: url("/public/img/intro.jpg") no-repeat center;
+  width: 950px;
+  height: 600px;
+  z-index: 1;
+  top: 15%;
+  left: 25vw;
+  border: 1px solid #ccc;
+  -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 2s; /* Firefox < 16 */
+        -ms-animation: fadein 2s; /* Internet Explorer */
+         -o-animation: fadein 2s; /* Opera < 12.1 */
+            animation: fadein 2s;
+}
+
+
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.menu .panel-heading, .menu .btn:hover, .back-to-products {
+  background-color: #337ab7;
+  color: #fff;
+}
+
+.col-md-9.main, .cart-row {
+  display: -webkit-box;:
+  -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  max-width: none;
+  padding: 0;
+  -webkit-align-items: stretch;
+  align-items: stretch;
+}
+
+.main .product, .cart-row .product {
+  height: auto;
+  align-items: stretch;
+  display: -webkit-box;
+}
+
+.product-dropdown {
+  margin-bottom: 15px;
+  width: 55px;
+}
+
+.product .thumbnail {
+  width: 100%;
+  position: relative;
+}
+
+
+
+.product .thumbnail .caption {
+  padding-bottom: 60px;
+}
+
+.product .thumbnail .btn.view-product, .product .btn-group {
+  position: absolute;
+  bottom: 20px;
+  right: 10px;
+  left: 10px;
+  width: auto;
+}
+
+.btn.back-to-products:hover, .btn.back-to-products:active, .btn.back-to-products:focus {
+  background-color: #286090;
+  border-color: #204d74;
+  color: #fff;
+}
+
+.btn {
+	margin-top: 10px;
+}
+
+.cartBox{
+	/*border: 1px solid #ddd;*/
+	border: 1px solid black;
+}
+.noPad {
+	 margin-top: 0px;
+}
+
+.inline {
+	display: inline-block;
+}
+
+.vertical-center {
+  min-height: 100%;  
+  min-height: 100vh; 
+  align-items: center;
+}
+
+.order .panel-heading{
+  height: 58px;
+}
+
+@media screen and (max-width: 768px) {
+    .product {
+        width: 50%;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    .product {
+        width: 100%;
+    }
+}
+
+

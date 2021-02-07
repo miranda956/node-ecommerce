@@ -1,3 +1,4 @@
+// @ts-nocheck
 
 var db = require("../models");
 var stripe = require('../config/stripe.js');
